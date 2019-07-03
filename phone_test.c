@@ -63,10 +63,8 @@ void *phone_func(void *arg){
         
         ns = fread(data_send, sizeof(char), N * sizeof(char), fp_read);
         ns = send(s, data_send, N * sizeof(char), 0);
-        while((nr = recv(s, data_recv, N*sizeof(char), 0)) < 0) continue;
-        if(nr == 0){
-        //break;
-        }
+        //while((nr = recv(s, data_recv, N*sizeof(char), 0)) < 0) continue;
+        nr = recv(s, data_recv, N*sizeof(char), 0);
         if(flag_read==0){
             if((fp_write = popen("play -t raw -q -b 16 -c 1 -e s -r 44100 -", "w"))==NULL) return 1;
             flag_read=1;
@@ -102,21 +100,18 @@ int phone_client(int s,struct sockaddr *addr){
             printf("server quit this phone....\n\n");
             break;
         }
-        while((nr = recv(s, data_recv, N*sizeof(char), 0)) < 0){
+        //while((nr = recv(s, data_recv, N*sizeof(char), 0)) < 0)
+        nr = recv(s, data_recv, N*sizeof(char), 0);
             //continue;
             //break;
-            int ret = connect(s,(struct sockaddr *)&addr, sizeof(addr));
-        
+            //int ret = connect(s,(struct sockaddr *)&addr, sizeof(addr));
+            /*
             if(ret!=0){
                 printf("cannot connect.");
                 break;
             }
-        }
+            */
         //printf("%d\n",ns);
-        if(nr == 0){
-            break;
-        }
-        
         if(flag_write==0){
         if((fp_write = popen("play -t raw -q -b 16 -c 1 -e s -r 44100 -", "w"))==NULL) return 1;
         flag_write = 1;
